@@ -1,0 +1,29 @@
+server:
+  port: 8888
+#DB Configuration
+master:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://test.ximimi.top:3306/test_ximimi_top
+    username: test_ximimi_top
+    password: LJcLNDswfwBTdPyD
+
+second:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mytest.ximimi.top:3306/mytest_ximimi_to
+    username: mytest_ximimi_to
+    password: anW87K8BSrNSyaHr
+
+
+#logging
+logging:
+  level:
+    com.xc.springboot: debug
+
+
+#MyBatis
+mybatis:
+#  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: top.ximimi.dao.entity
+
