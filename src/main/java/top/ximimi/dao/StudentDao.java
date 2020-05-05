@@ -1,7 +1,9 @@
 package top.ximimi.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import top.ximimi.dao.entity.Student;
 
@@ -13,16 +15,19 @@ import java.util.Map;
 @Repository
 public class StudentDao {
 
-    @Autowired
-    SqlSession sqlSession;
+    //@Autowired
+   // @Qualifier("masterSqlSessionFactory")
+    //SqlSessionFactory sqlSessionFactory;
 
-    public List<Student> queryAllStudents(){
+    @Autowired
+    @Qualifier("masterSqlSession")
+    SqlSession sqlSession; //= sqlSessionFactory.openSession();
+
+    public List<Student> queryAllStudents() {
 
         String sqlId = "selectStudents";
         return sqlSession.selectList(sqlId);
 
     }
-
-
 
 }

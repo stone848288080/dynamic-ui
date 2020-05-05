@@ -1,9 +1,11 @@
 package top.ximimi.config.datasource;
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +55,15 @@ public class SecondDataSourceConfig {
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(SecondDataSourceConfig.MAPPER_LOCATION));
         return sessionFactory.getObject();
+    }
+
+    @Autowired
+    @Qualifier("secondSqlSessionFactory")
+    SqlSessionFactory sqlSessionFactory;
+
+    @Bean(name = "secondSqlSession")
+    public SqlSession clusterSqlSession(){
+        return sqlSessionFactory.openSession();
     }
 
 }

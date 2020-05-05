@@ -4,14 +4,14 @@ server:
 master:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://test.ximimi.top:3306/test_ximimi_top
+    url: jdbc:mysql://test.ximimi.top:3306/test_ximimi_top?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: test_ximimi_top
     password: LJcLNDswfwBTdPyD
 
 second:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mytest.ximimi.top:3306/mytest_ximimi_to
+    url: jdbc:mysql://mytest.ximimi.top:3306/mytest_ximimi_to?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: mytest_ximimi_to
     password: anW87K8BSrNSyaHr
 
