@@ -9,7 +9,7 @@ import top.ximimi.service.StudentService;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+
 @RequestMapping("/student")
 public class StudentController {
 
