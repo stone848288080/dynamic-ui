@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { ReactDOM } from "react";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+import {Button,Box,TextField,Stack} from "@mui/material";
 import axios from "axios";
 
 export default class Demo extends Component {
-  state = {text:"Hello World"}
+  state = {text:"Hello World",websocketMsg:"web socket message"}
     
   getText = () => {
       let _this = this;
@@ -24,6 +22,17 @@ export default class Demo extends Component {
       );
   }
 
+
+  triggerWebsocket= async ()=>{
+      let response =null;
+      try{
+        response = await axios.get('/demo/get-websocket-text');
+        console.log("start trigger");
+      }catch(e){
+        console.error(e);
+      }  
+  }
+
   handleClick=()=>{
     console.log("handle click start");
     if(this.timer){
@@ -37,8 +46,42 @@ export default class Demo extends Component {
     },1000)
   }
 
+  appendWebSocketMsg = (message)=>{
+      this.setState((prevState,props)=>({
+          websocketMsg: prevState.websocketMsg + "\n" + message
+      }))
+  }
+
   componentDidMount(){
+    let _this = this;
+    let webSocket = null;
+    if('WebSocket' in window){
+      console.log("浏览器支持websocket，继续websocket工作");
+      webSocket = new WebSocket('ws://localhost:8888/websocket');
+    }else{
+      alert("该浏览器不支持websocket");
+    }
     
+    webSocket.onopen=function(event){
+      console.log("websocket 建立连接")
+    }
+    
+    webSocket.onclose = function(event){
+      console.log("websocket 断开链接")
+    }
+
+    webSocket.onmessage = function(event){
+      console.log("收到websocket的消息："+ event.data);
+      _this.appendWebSocketMsg(event.data);
+    }
+
+    webSocket.onerror = function(event){
+      console.log("web socket 通信发生错误");
+    }
+
+    window.onbeforeunload = function(){
+      webSocket.close();
+    }
   }
 
   render() {
@@ -55,14 +98,27 @@ export default class Demo extends Component {
           <div>
             <TextField
               id="outlined-multiline-static"
-              label="Multiline"
+              label="普通http消息窗格"
               multiline
               rows={8}
               value={this.state.text}
             />
           </div>
+          <div>
+            <TextField
+              id="outlined-multiline-static"
+              label="websocket消息窗格"
+              multiline
+              rows={8}
+              value={this.state.websocketMsg}
+            />
+          </div>
         </Box>
-        <Button variant="contained" onClick={this.handleClick}>Submit</Button>
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" onClick={this.handleClick}>Submit</Button>
+          <Button variant="contained" onClick={this.triggerWebsocket}>WebSocket触发</Button>
+        </Stack>
+        
       </div>
     );
   }
