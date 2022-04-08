@@ -5,6 +5,16 @@ import axios from "axios";
 
 export default class Demo extends Component {
   state = {text:"Hello World",websocketMsg:"web socket message"}
+  constructor(props){
+      super(props);
+      this.webSocket = null;
+      if('WebSocket' in window){
+        console.log("浏览器支持websocket，继续websocket工作");
+        this.webSocket = new WebSocket('ws://localhost:8888/websocket');
+      }else{
+        alert("该浏览器不支持websocket");
+      }
+  }
     
   getText = () => {
       let _this = this;
@@ -24,10 +34,31 @@ export default class Demo extends Component {
 
 
   triggerWebsocket= async ()=>{
+    let _this = this;
+
+    
+    _this.webSocket.onopen=function(event){
+      console.log("websocket 建立连接")
+    }
+    
+    _this.webSocket.onclose = function(event){
+      console.log("websocket 断开链接")
+    }
+
+    _this.webSocket.onmessage = function(event){
+      console.log("收到websocket的消息："+ event.data);
+      _this.appendWebSocketMsg(event.data);
+    }
+
+    _this.webSocket.onerror = function(event){
+      console.log("web socket 通信发生错误");
+    }
+
       let response =null;
       try{
-        response = await axios.get('/demo/get-websocket-text');
         console.log("start trigger");
+        response = await axios.get('/demo/get-websocket-text');
+        
       }catch(e){
         console.error(e);
       }  
@@ -53,35 +84,15 @@ export default class Demo extends Component {
   }
 
   componentDidMount(){
-    let _this = this;
-    let webSocket = null;
-    if('WebSocket' in window){
-      console.log("浏览器支持websocket，继续websocket工作");
-      webSocket = new WebSocket('ws://localhost:8888/websocket');
-    }else{
-      alert("该浏览器不支持websocket");
-    }
-    
-    webSocket.onopen=function(event){
-      console.log("websocket 建立连接")
-    }
-    
-    webSocket.onclose = function(event){
-      console.log("websocket 断开链接")
-    }
+    window.onbeforeunload = this.onbeforeunload;
+  }
 
-    webSocket.onmessage = function(event){
-      console.log("收到websocket的消息："+ event.data);
-      _this.appendWebSocketMsg(event.data);
-    }
+  componentWillUnmount(){
+    window.onbeforeunload = this.onbeforeunload;
+  }
 
-    webSocket.onerror = function(event){
-      console.log("web socket 通信发生错误");
-    }
-
-    window.onbeforeunload = function(){
-      webSocket.close();
-    }
+  onbeforeunload=()=>{
+    this.webSocket.close();
   }
 
   render() {

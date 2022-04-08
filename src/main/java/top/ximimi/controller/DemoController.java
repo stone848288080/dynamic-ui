@@ -20,7 +20,6 @@ public class DemoController {
     @GetMapping("/get-default-text")
     public String getDefaultText(){
         Date date = new Date();
-        webSocket.sendMessage(date.toString());
         return date.toString();
     }
 
@@ -29,7 +28,7 @@ public class DemoController {
     public void getWebSocketMessage(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        while(true){
+        for (int i = 0; i < 10 ; i++) {
             String date = sdf.format(new Date());
             try {
                 Thread.sleep(1000);
