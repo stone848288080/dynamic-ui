@@ -2,9 +2,7 @@ package top.ximimi.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.ximimi.websocket.WebSocket;
 
 import java.text.SimpleDateFormat;
@@ -24,8 +22,8 @@ public class DemoController {
     }
 
 
-    @GetMapping("/get-websocket-text")
-    public void getWebSocketMessage(){
+    @GetMapping("/get-websocket-text/{username}")
+    public void getWebSocketMessage(@PathVariable("username") String userName){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         for (int i = 0; i < 10 ; i++) {
@@ -35,7 +33,7 @@ public class DemoController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            webSocket.sendMessage(date);
+            webSocket.sendMessageToOne(date,userName);
         }
     }
 }

@@ -39,7 +39,8 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.26.1"
+    "axios": "^0.26.1",
+    "uuid": "^8.3.2"
   },
-  "proxy":"http://localhost:8888"
+  "proxy": "http://localhost:8888"
 }
