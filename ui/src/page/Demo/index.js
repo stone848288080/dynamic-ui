@@ -65,7 +65,7 @@ export default class Demo extends Component {
     if('WebSocket' in window){
       console.log("浏览器支持websocket，继续websocket工作");
       console.log(this.userName)
-      this.webSocket = new WebSocket('ws://localhost:8888/websocket/'+ this.userName);
+      this.webSocket = new WebSocket('ws://'+ window.location.hostname +':8888/websocket/'+ this.userName);
     }else{
       alert("该浏览器不支持websocket");
     }
